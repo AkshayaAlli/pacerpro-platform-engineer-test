@@ -1,0 +1,6 @@
+_sourceCategory=your/source/category
+| parse regex field=_raw "path=(?<path>/api/data)\s+response_time=(?<rt_s>\d+(\.\d+)?)s" nodrop
+| where path="/api/data" and rt_s > 3
+| timeslice 10m
+| count as slow_requests by _timeslice
+| where slow_requests > 5
